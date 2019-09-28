@@ -1,6 +1,13 @@
 const transactions = (state, action) => {
     if (state === undefined) {
-        return [];
+        const state = JSON.parse(localStorage.getItem('transactions'), (key, value) => {
+            if (key == 'date') return new Date(value);
+            return value;
+        });
+        if (state == null){
+            return [];
+        }
+        return state;
     }
 
     let newState;

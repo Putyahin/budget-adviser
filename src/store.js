@@ -1,7 +1,7 @@
 import {createStore} from 'redux';
 import reducer from './reducers';
 
-const storeHandler = () => {
+const storeSaver = () => {
     const state = store.getState();
     localStorage.setItem('transactions', JSON.stringify(state.transactions));
     localStorage.setItem('income', JSON.stringify(state.types.incomeTransactionsList));
@@ -9,7 +9,7 @@ const storeHandler = () => {
 }; 
 
 const store = createStore(reducer);
-store.subscribe(storeHandler);
+store.subscribe(storeSaver);
 
 
 

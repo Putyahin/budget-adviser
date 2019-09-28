@@ -36,7 +36,7 @@ class ModalAddTransaction extends Component {
                 label: label,
                 amount: amount,
                 type: type,
-                date: date.toLocaleDateString(),
+                date: date,
 
             };
             this.setState({amount: ''});

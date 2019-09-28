@@ -3,12 +3,26 @@ import expensesList from '../expenses-transactions-list';
 
 const types = (state, action) => 
 {   
-    if (state === undefined) {
+    /* if (state == null) {
         return {
             incomeTransactionsList: incomeList, 
             expensesTransactionsList: expensesList};
+    } */
+    if (state === undefined) {
+        let income = JSON.parse(localStorage.getItem('income'));
+        let expenses = JSON.parse(localStorage.getItem('expenses'));
+        if (income == null) {
+            income = incomeList;
+        }
+        if (expenses == null) {
+            expenses = expensesList;
+        }
+        const state = {
+            incomeTransactionsList: income, 
+            expensesTransactionsList: expenses
+        };
+        return state;
     }
-
     let newState;
     let idx;
      

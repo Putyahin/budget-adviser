@@ -69,7 +69,7 @@ class TransactionsList extends Component {
                                     <td>{element.label}</td>
                                     <td>{element.amount}</td>
                                     <td>
-                                        {element.date}
+                                        {element.date.toLocaleDateString()}
                                     </td>
                                     <td>
                                         <button 
