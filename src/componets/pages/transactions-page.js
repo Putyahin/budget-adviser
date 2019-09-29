@@ -1,16 +1,15 @@
-import React, {Component} from 'react';
+import React from 'react';
 import TransactionsList from '../transactions-list';
-import AddTransaction from '../add-transaction/';
 
-export default class TransactionsPage extends Component {
 
-    render() {
+const TransactionsPage = () => {
 
-        return (
-           <div>
-                <AddTransaction />
-                <TransactionsList />
-           </div>
-        );
-    }
-}
+    return (
+       <div>
+            <TransactionsList />
+       </div>
+    );
+};
+
+
+export default TransactionsPage;

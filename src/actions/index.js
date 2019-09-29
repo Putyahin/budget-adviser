@@ -42,11 +42,19 @@ const deleteType = (type, id) => {
     };
 };
 
+const newPeriod = (period) => {
+    return {
+        type: 'PERIOD_CHANGE',
+        payload: period
+    };
+};
+
 export {
     addTransaction,
     deleteTransaction,
     editTransaction,
     addType,
     editType,
-    deleteType
+    deleteType,
+    newPeriod
 };

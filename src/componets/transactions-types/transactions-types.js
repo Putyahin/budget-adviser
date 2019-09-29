@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import{ connect } from 'react-redux';
 import {bindActionCreators} from 'redux';
 import ModalEditType from '../modal-edit-type/';
+import ModalAddType from '../modal-add-type';
 import * as actions from '../../actions/';
 
 class TransactionsTypes extends Component {
@@ -10,9 +11,10 @@ class TransactionsTypes extends Component {
         isEdit: false,
         type: '',
         id: null,
+        isAddModal: false
     };
 
-    closeModal = () => {
+    closeEditModal = () => {
         this.setState({isEdit: false });
     };
 
@@ -35,8 +37,20 @@ class TransactionsTypes extends Component {
 
     onDelete = (e) => {
         let [type, id] = e.target.id.split(';');
-        id--;
-        this.props.Delete(type, id);
+        this.props.Delete(type, --id);
+    };
+
+    closeAddModal = () => {
+        this.setState({isAddModal: false});
+    };
+
+    newAddType = () => {
+        this.setState({isAddModal: true});
+    };
+
+    onAddType = (type, newType) => {
+        this.props.addType(type, newType);
+        this.setState({isAddModal: false});
     };
 
     createTable = (data, text) => {
@@ -78,20 +92,31 @@ class TransactionsTypes extends Component {
     };
 
     render() {
-        const expenses = this.props.expensesTransactionsList;
-        const income = this.props.incomeTransactionsList;
         return (
             <div className = "container">
+                <div className = "input-group mb-3">
+                    <button 
+                        className = "btn btn-primary"
+                        onClick = {this.newAddType}>
+                        Add type
+                    </button>
+                </div>
+                    { this.state.isAddModal &&
+                        <ModalAddType 
+                            onClose = {this.closeAddModal} 
+                            onAdd = {this.onAddType}
+                        />
+                    }
                 <div>
-                    {this.createTable(income, 'Income')}
+                    {this.createTable(this.props.incomeTransactionsList, 'Income')}
                 </div>
                 <div>    
-                    {this.createTable(expenses, 'Expenses')}
+                    {this.createTable(this.props.expensesTransactionsList, 'Expenses')}
                 </div>
                 <div>
-                    {this.state.isEdit && 
+                    { this.state.isEdit && 
                         <ModalEditType
-                            onClose = {this.closeModal}
+                            onClose = {this.closeEditModal}
                             onAdd = {this.onUpdate}
                             modalProps = { { type: this.state.type, id: this.state.id } }
                         />
@@ -99,7 +124,7 @@ class TransactionsTypes extends Component {
                 </div>
             </div>
         );
-    }
+    };
 }
 
 const mapStateToProps = ({ types: { incomeTransactionsList, expensesTransactionsList } }) => {
@@ -107,8 +132,8 @@ const mapStateToProps = ({ types: { incomeTransactionsList, expensesTransactions
 };
 
 const mapDispatchToProps = (dispatch) => {
-    const {editType, deleteType} = bindActionCreators(actions, dispatch)
-    return {Edit: editType, Delete: deleteType};
-}
+    const {addType, editType, deleteType} = bindActionCreators(actions, dispatch)
+    return {addType: addType, Edit: editType, Delete: deleteType};
+};
 
 export default connect (mapStateToProps, mapDispatchToProps)(TransactionsTypes); 

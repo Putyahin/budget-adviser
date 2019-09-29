@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import JsChart from '../js-chart';
 import './overview.css';
 import { connect } from 'react-redux';
+import DatePicker from '../date-picker';
 
 
 class Overview extends Component {
@@ -17,7 +18,14 @@ class Overview extends Component {
         let incomeAmountArr = [];
         let expensesLabelArr = [];
         let expensesAmountArr = [];
+
+        const from = this.props.period.from;
+        let to = new Date(this.props.period.to);
+        to.setDate(to.getDate() + 1);
+
         this.props.transactions.map( (element) => {
+            const date = element.date;
+            if (date < from || date > to) return null;
             if (element.type == 'Income')
             {
                 income += +element.amount;
@@ -104,6 +112,7 @@ class Overview extends Component {
 
         return (
             <div className = "container">
+                <DatePicker />
                 <div className = "row">
                     <h5 className = "col-sm" >
                         Total period expenses: {expenses}
@@ -126,8 +135,8 @@ class Overview extends Component {
     }
 }
 
-const mapStateToProps = ({ transactions }) => {
-    return { transactions };
+const mapStateToProps = ({ transactions, period }) => {
+    return { transactions, period };
 };
 
 export default connect(mapStateToProps)(Overview);

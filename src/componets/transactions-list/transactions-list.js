@@ -4,14 +4,18 @@ import { connect } from 'react-redux';
 import './transactions-list.css';
 import * as actions from '../../actions/';
 import ModalAddTransaction from '../modal-add-transaction/';
+import DatePicker from '../date-picker/';
 
 class TransactionsList extends Component {
     state = {
+        isAdd: false,
         isEdit: false,
-        id: null
+        id: null,
+        description: ''
+        
     };
 
-    closeModal = () => {
+    closeModalEdit = () => {
         this.setState({isEdit: false });
     };
 
@@ -37,8 +41,36 @@ class TransactionsList extends Component {
         this.props.Delete(id);
     };
 
+    closeAdd = () => {
+        this.setState({isAdd: false});
+    };
+
+    newTransaction = () => {
+        this.setState({isAdd: true});
+    };
+
+    onAddTransaction = (transaction) => {
+        this.setState({isAdd: false});
+        this.props.Add(transaction);
+    };
+
+    onDescriptionReset = () => {
+        this.setState({description: ''});
+    };
+
+    onDescriptionChange = (e) => {
+        this.setState({description: e.target.value});
+    };
+
     render() {
-        const transactions = this.props.transactions;
+        let transactions = this.props.transactions;
+        const description = this.state.description;
+        transactions = transactions.filter((element) => {
+            return element.description.toLowerCase().trim().includes(description.trim().toLowerCase());
+        });
+        const from = this.props.period.from;
+        let to = new Date(this.props.period.to);
+        to.setDate(to.getDate() + 1);
         let table;
         if(transactions.length == 0) {
             table = (
@@ -54,6 +86,7 @@ class TransactionsList extends Component {
                             <th scope="col">#</th>
                             <th scope="col">Transaction</th>
                             <th scope="col">Amount</th>
+                            <th scope="col">Description</th>
                             <th scope="col">Date</th>
                             <th scope="col"></th>
                         </tr>
@@ -62,12 +95,15 @@ class TransactionsList extends Component {
                     
 
                         {transactions.map((element) => {
+                            const date = element.date;
+                            if (date < from || date > to) return null;
                             return (
                                 <tr className="table">
 
                                     <td>{element.type}</td>
                                     <td>{element.label}</td>
                                     <td>{element.amount}</td>
+                                    <td>{element.description}</td>
                                     <td>
                                         {element.date.toLocaleDateString()}
                                     </td>
@@ -96,10 +132,33 @@ class TransactionsList extends Component {
         }
         return (
             <div className="container">
+
+                <div className = "row align-items-center">
+                    <button 
+                        className = "btn btn-primary"
+                        onClick = {this.newTransaction}>
+                        Add transaction
+                    </button>
+                    <div className="description-filter input-group col-5">
+                        <span>Description filter:</span>
+                        <input 
+                            value={ this.state.description } 
+                            className="form-control"
+                            onChange={ this.onDescriptionChange }/>
+                        <div>
+                            <button
+                                className="btn btn-outline-info" 
+                                onClick={ this.onDescriptionReset }>
+                                X
+                            </button>
+                        </div>
+                    </div>
+                    <DatePicker />
+                </div>
                 {table}
                 {this.state.isEdit && 
                     <ModalAddTransaction 
-                        onClose = {this.closeModal}
+                        onClose = {this.closeModalEdit}
                         onAdd = {this.onUpdate}
                         btnName = {'Update'}
                         modalProps = 
@@ -110,18 +169,23 @@ class TransactionsList extends Component {
                             )]}
                     />
                 }
+                { this.state.isAdd && <ModalAddTransaction 
+                    onClose = {this.closeAdd} 
+                    onAdd = {this.onAddTransaction}
+                    btnName = {'Add'}/> 
+                }
             </div>
         );
     }
 }
 
-const mapStateToProps = ({ transactions }) => {
-    return { transactions };
+const mapStateToProps = ({ transactions, period }) => {
+    return { transactions, period };
 };
 
 const mapDispatchToProps = (dispatch) => {
-    const {editTransaction, deleteTransaction} = bindActionCreators(actions, dispatch)
-    return {Edit: editTransaction, Delete: deleteTransaction};
+    const { addTransaction, editTransaction, deleteTransaction} = bindActionCreators(actions, dispatch)
+    return { Add: addTransaction, Edit: editTransaction, Delete: deleteTransaction };
 } 
 
 export default connect(mapStateToProps, mapDispatchToProps)(TransactionsList);

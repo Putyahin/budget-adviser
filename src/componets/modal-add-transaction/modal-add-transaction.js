@@ -13,9 +13,11 @@ class ModalAddTransaction extends Component {
                 toggle: 0,
                 label: this.props.incomeTransactionsList[0].label,
                 amount: '',
+                description: '',
                 type: 'Income',
                 isError: true,
-                valid: 0
+                validAmount: 0,
+                validDescription: 0
             };
         } else
         {
@@ -26,8 +28,8 @@ class ModalAddTransaction extends Component {
     newTransaction = (e) => {
         if (!this.state.isError) {
             e.preventDefault();
-            const {icon, toggle, label, amount, type} = this.state;
-            const date = new Date();
+            let {icon, toggle, label, amount, description, type, date} = this.state;
+            if (date===undefined) {date = new Date();}
             const id = date.getTime();
             const transaction = {
                 id: id,
@@ -35,11 +37,12 @@ class ModalAddTransaction extends Component {
                 toggle: toggle,
                 label: label,
                 amount: amount,
+                description: description,
                 type: type,
-                date: date,
+                date: date
 
             };
-            this.setState({amount: ''});
+            // this.setState({amount: ''});
             this.props.onAdd(transaction);
         }
     };
@@ -54,9 +57,9 @@ class ModalAddTransaction extends Component {
         this.setState({amount: amount});
         amount = Number(amount);
         if(typeof(amount) == 'number' && amount > 0) {
-            this.setState({isError: false, valid: 1});
+            this.setState({isError: false, validAmount: 1});
         } else {
-            this.setState({isError: true, valid: -1});
+            this.setState({isError: true, validAmount: -1});
         }
     };
 
@@ -76,6 +79,16 @@ class ModalAddTransaction extends Component {
         }
     };
 
+    onDescriptionChange = (e) => {
+        let description = e.target.value;
+        this.setState({ description: description });
+        if(description.length > 2) {
+            this.setState({isError: false, validDescription: 1});
+        } else {
+            this.setState({isError: true, validDescription: -1});
+        }
+    };
+
     render() {
         let list;
         if (this.state.type === 'Income') {
@@ -90,13 +103,18 @@ class ModalAddTransaction extends Component {
         } else {
             toggleExpenses = ' active';
         }
-        let valid = '';
-        if(this.state.valid == 1) {
-            valid = ' is-valid';
-        } else if (this.state.valid == -1) {
-            valid = ' is-invalid';
+        let validAmount = '';
+        if(this.state.validAmount == 1) {
+            validAmount = ' is-valid';
+        } else if (this.state.validAmount == -1) {
+            validAmount = ' is-invalid';
         }
-
+        let validDescription = '';
+        if(this.state.validDescription == 1) {
+            validDescription = ' is-valid';
+        } else if (this.state.validDescription == -1) {
+            validDescription = ' is-invalid';
+        }
         return (
             <div className="modal">
                 <div className="modal-dialog" role="document">
@@ -130,8 +148,14 @@ class ModalAddTransaction extends Component {
                             <p></p>
                             <p>Amount:</p>
                             <div className = "form-group">
-                                <input className = {"form-control" + valid} type="text" value = {this.state.amount} 
+                                <input className = {"form-control" + validAmount} type="text" value = {this.state.amount} 
                                     onChange = {this.onAmountChange}/>
+                            </div>
+                            <p></p>
+                            <p>Description:</p>
+                            <div className = "form-group">
+                                <input className = {"form-control" + validDescription} type="text" value = {this.state.description} 
+                                    onChange = {this.onDescriptionChange}/>
                             </div>
                         </div>
                         <div className="modal-footer">

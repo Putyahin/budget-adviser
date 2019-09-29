@@ -3,11 +3,6 @@ import expensesList from '../expenses-transactions-list';
 
 const types = (state, action) => 
 {   
-    /* if (state == null) {
-        return {
-            incomeTransactionsList: incomeList, 
-            expensesTransactionsList: expensesList};
-    } */
     if (state === undefined) {
         let income = JSON.parse(localStorage.getItem('income'));
         let expenses = JSON.parse(localStorage.getItem('expenses'));
@@ -38,8 +33,8 @@ const types = (state, action) =>
         case 'DELETE_TYPE':
             newState = state;
             if (action.payload.transactionType == 'Income') {
-                idx = state.incomeTransactionsList.
-                    findIndex((element) => element.id == action.payload.id);
+                idx = state.incomeTransactionsList.findIndex
+                    ((element) => element.id == action.payload.id);
                 if(newState.incomeTransactionsList.length > 1) {
                     newState.incomeTransactionsList = [
                         ...state.incomeTransactionsList.slice(0, idx),
@@ -62,12 +57,12 @@ const types = (state, action) =>
         case 'EDIT_TYPE':
                 newState = state;
                 if (action.payload.transactionType == 'Income') {
-                    idx = state.incomeTransactionsList.
-                        findIndex((element) => element.id == action.payload.data.id);
+                    idx = state.incomeTransactionsList.findIndex
+                        ((element) => element.id == action.payload.data.id);
                     newState.incomeTransactionsList[idx] = action.payload.data;
                 } else {
-                    idx = state.expensesTransactionsList.
-                        findIndex((element) => element.id == action.payload.data.id);
+                    idx = state.expensesTransactionsList.findIndex
+                        ((element) => element.id == action.payload.data.id);
                     newState.expensesTransactionsList[idx] = action.payload.data;
                 }
                 return Object.assign({},newState);

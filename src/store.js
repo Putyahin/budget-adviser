@@ -6,6 +6,7 @@ const storeSaver = () => {
     localStorage.setItem('transactions', JSON.stringify(state.transactions));
     localStorage.setItem('income', JSON.stringify(state.types.incomeTransactionsList));
     localStorage.setItem('expenses', JSON.stringify(state.types.expensesTransactionsList));
+    localStorage.setItem('period',JSON.stringify(state.period));
 }; 
 
 const store = createStore(reducer);

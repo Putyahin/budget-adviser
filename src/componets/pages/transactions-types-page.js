@@ -1,12 +1,10 @@
-import React from 'react';
-import AddTransactionsTypes from '../add-transactions-types';
+import React, { Component } from 'react';
 import TransactionsTypes from '../transactions-types';
 
 const TransactionsTypesPage = () => {
 
     return (
         <div>
-            <AddTransactionsTypes />
             <TransactionsTypes />
         </div>
     );
