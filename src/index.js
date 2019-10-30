@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './componets/app/';
-import ErrorGlobal from './componets/error-global/';
+import App from './components/App/';
+import ErrorGlobal from './components/ErrorGlobal';
 import {BrowserRouter as Router} from 'react-router-dom';
 import {Provider} from 'react-redux';
 import store from './store';

@@ -1,5 +1,5 @@
-import incomeList from '../income-transactions-list';
-import expensesList from '../expenses-transactions-list';
+import incomeList from '../incomeTransactionsList';
+import expensesList from '../expensesTransactionsList';
 
 const types = (state, action) => 
 {   

@@ -1,0 +1,26 @@
+.table .btn {
+    font-size: 12px;
+    line-height: 0.5;
+}
+
+.row {
+    margin-top: 15px;
+    margin-bottom: 35px;
+}
+
+.description-filter {
+    margin-left: 10px;
+}
+
+.description-filter .input {
+    margin-bottom: 5px;
+}
+
+.description-filter .btn-outline-info {
+    margin-top: 0;
+    margin-left: 2px;
+}
+
+.description-text {
+    padding-top: 6px;
+}
